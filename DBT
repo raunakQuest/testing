@@ -1,0 +1,203 @@
+version : 2
+models:
+  - name: ContentRecommendations
+    columns:
+      - name: RecommendationID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: ProfileID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('Profiles')
+                field: ProfileID
+      - name: ContentID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('DigitalContent')
+                field: ContentID
+      - name: RecommendedDate
+        data_type: date
+      - name: SourceOfRecommendation
+        data_type: nvarchar
+  - name: Devices
+    columns:
+      - name: DeviceID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: ProfileID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('Profiles')
+                field: ProfileID
+      - name: DeviceType
+        data_type: nvarchar
+      - name: OperatingSystem
+        data_type: nvarchar
+      - name: LastAccessedDate
+        data_type: datetime
+      - name: RegisteredDate
+        data_type: datetime
+  - name: DigitalContent
+    columns:
+      - name: ContentID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: Title
+        data_type: nvarchar
+      - name: Genre
+        data_type: nvarchar
+      - name: ReleaseDate
+        data_type: date
+      - name: Rating
+        data_type: nvarchar
+      - name: ContentType
+        data_type: nvarchar
+      - name: DurationMinutes
+        data_type: int
+      - name: Language
+        data_type: nvarchar
+      - name: AvailableRegions
+        data_type: nvarchar
+      - name: LicenseExpirationDate
+        data_type: date
+  - name: Licensing
+    columns:
+      - name: LicenseID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: ContentID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('DigitalContent')
+                field: ContentID
+      - name: LicenseStartDate
+        data_type: date
+      - name: LicenseEndDate
+        data_type: date
+      - name: RegionsLicensed
+        data_type: nvarchar
+      - name: LicenseFee
+        data_type: decimal
+  - name: Payments
+    columns:
+      - name: PaymentID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: UserID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('Users')
+                field: UserID
+      - name: AmountPaid
+        data_type: decimal
+      - name: PaymentMethod
+        data_type: nvarchar
+      - name: BillingCycle
+        data_type: nvarchar
+      - name: SubscriptionStartDate
+        data_type: date
+      - name: NextBillingDate
+        data_type: date
+  - name: Profiles
+    columns:
+      - name: ProfileID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: UserID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('Users')
+                field: UserID
+      - name: ProfileName
+        data_type: nvarchar
+      - name: PreferredLanguage
+        data_type: nvarchar
+      - name: AgeRatingSetting
+        data_type: nvarchar
+  - name: StreamingHistory
+    columns:
+      - name: SessionID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: ProfileID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('Profiles')
+                field: ProfileID
+      - name: ContentID
+        data_type: int
+        tests:
+          - not_null
+          - relationships:
+                to: ref('DigitalContent')
+                field: ContentID
+      - name: StreamStartTime
+        data_type: datetime
+      - name: StreamEndTime
+        data_type: datetime
+      - name: CompletionStatus
+        data_type: bit
+      - name: DeviceID
+        data_type: int
+  - name: SubscriptionPlans
+    columns:
+      - name: PlanID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: PlanName
+        data_type: nvarchar
+      - name: NumberOfScreens
+        data_type: int
+      - name: MaxResolution
+        data_type: nvarchar
+      - name: MonthlyFee
+        data_type: decimal
+      - name: AllowedDevices
+        data_type: int
+  - name: Users
+    columns:
+      - name: UserID
+        data_type: int
+        tests:
+          - unique
+          - not_null
+      - name: PrimaryHolderName
+        data_type: nvarchar
+      - name: Email
+        data_type: nvarchar
+      - name: PasswordHash
+        data_type: nvarchar
+      - name: SubscriptionPlanID
+        data_type: int
+      - name: AccountCreationDate
+        data_type: date
